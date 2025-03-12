@@ -7,6 +7,11 @@ endif()
 set(SHADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/shaders")
 set(SPIRV_BIN "${CMAKE_CURRENT_SOURCE_DIR}/shaders")
 
+file(GLOB_RECURSE SHADER_FILES
+    CONFIGURE_DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.slang
+)
+
 function(compile_shader shader)
     get_filename_component(FILE_NAME ${shader} NAME)
     set(SPIRV_OUTPUT "${shader}.spv")
@@ -47,4 +52,9 @@ compile_shader("${SHADER_DIR}/surfels/spawn.slang")
 compile_shader("${SHADER_DIR}/final.slang")
 
 add_custom_target(compile_spirv DEPENDS ${SPIRV_BINARY_FILES})
+
+target_sources(compile_spirv 
+	PRIVATE ${SHADER_FILES}
+)
+
 add_dependencies(wyre compile_spirv)

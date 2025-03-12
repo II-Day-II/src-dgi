@@ -4,6 +4,8 @@ project(wyre)
 # C++ standard version
 set(CMAKE_CXX_STANDARD 20 CACHE STRING "" FORCE)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 # Library target
 add_library(wyre STATIC)
 target_compile_definitions(wyre PRIVATE WYRE_RUN=0)
