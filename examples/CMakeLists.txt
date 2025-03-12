@@ -6,6 +6,9 @@ function(add_example EXAMPLE_NAME)
     # Executable target
     add_executable(${EXE_NAME} "${EXAMPLE_DIR}/main.cpp")
     set_target_properties(${EXE_NAME} PROPERTIES OUTPUT_NAME ${EXE_NAME})
+    
+    # working directory
+    set_property(TARGET ${EXE_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
     # Add compiler (debug & release) definitions
     target_compile_definitions(${EXE_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG=1>)

@@ -32,6 +32,8 @@ class MySystem : wyre::System {
     /* Camera angles */
     float phi = 3.14f, theta = -0.15f;
 
+    glm::ivec2 old_mouse_pos = glm::ivec2(0);
+
     public:
     MySystem() = default;
     ~MySystem() override = default;
@@ -64,6 +66,16 @@ class MySystem : wyre::System {
         if (engine.input.is_key_held(wyre::KEY_UP)) theta += rotate_speed;
         if (engine.input.is_key_held(wyre::KEY_DOWN)) theta -= rotate_speed;
 
+        /* Rotate camera using mouse movement if clicked */
+        glm::ivec2 mouse_delta = glm::ivec2(0);
+        glm::ivec2 new_mouse_pos = engine.input.get_mouse_pos();
+        if (engine.input.is_mouse_held(wyre::MOUSE_LEFT)) {
+            mouse_delta = new_mouse_pos - old_mouse_pos;
+            theta -= mouse_delta.y * dt * 0.1f;
+            phi += mouse_delta.x * dt * 0.1f;
+        }
+        old_mouse_pos = new_mouse_pos;
+
         /* Update camera rotation */
         glm::mat4 rot = glm::rotate(glm::mat4(1.0f), theta, glm::vec3(1, 0, 0));
         rot *= glm::rotate(glm::mat4(1.0f), phi, glm::vec3(0, 1, 0));
@@ -82,6 +94,8 @@ class MySystem : wyre::System {
         if (engine.input.is_key_held(wyre::KEY_D)) camera_transform.position += right * move_speed;
         if (engine.input.is_key_held(wyre::KEY_SPACE)) camera_transform.position += up * move_speed;
         if (engine.input.is_key_held(wyre::KEY_LSHIFT)) camera_transform.position -= up * move_speed;
+        if (engine.input.is_key_held(wyre::KEY_E)) camera_transform.position += up * move_speed;
+        if (engine.input.is_key_held(wyre::KEY_Q)) camera_transform.position -= up * move_speed;
 
         // if (time > 5.0f) {
         //     engine.logger.info("five seconds passed.");
